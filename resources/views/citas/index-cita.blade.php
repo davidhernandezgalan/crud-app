@@ -37,7 +37,14 @@
                     </a>
                 </td>
                 <td>{{ $cita->fecha }}</td>
-                <td>{{ $cita->hora }}</td>
+                <td>
+                    @php
+                        // Convertir hora a formato 12 horas
+                        $time = \Carbon\Carbon::parse($cita->hora);
+                        $formattedTime = $time->format('g:i A'); // Ejemplo: 2:30 PM
+                    @endphp
+                    {{ $formattedTime }}
+                </td>
                 <td>{{ $cita->servicio }}</td>
                 <td>{{ $cita->comentario }}</td>
                 <td>{{ $cita->created_at }}</td>

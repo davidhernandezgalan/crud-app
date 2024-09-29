@@ -44,8 +44,8 @@ class CitaController extends Controller
                           ->first();
 
     if ($citaExistente) {
-        // Redirigir de nuevo con un mensaje de error
-        return redirect()->back()->withErrors(['error' => 'Ya existe una cita para esa fecha y hora.']);
+        // Redirigir de nuevo con un mensaje de error y los datos ingresados previamente
+        return redirect()->back()->withErrors(['error' => 'Ya existe una cita para esa fecha y hora.'])->withInput();
     }
 
     // Crear una nueva cita
@@ -90,9 +90,19 @@ class CitaController extends Controller
             'comentario' => ['nullable', 'max:500'],
         ]);
 
-        $cita->update($request->all());
+        $existeCita = Cita::where('fecha', $request->fecha)
+        ->where('hora', $request->hora)
+        ->where('id', '!=', $cita->id) // Excluir la cita que se está editando
+        ->exists();
 
-        return redirect()->route('cita.show', $cita);
+    if ($existeCita) {
+        return redirect()->back()->withErrors(['error' => 'Ya existe una cita agendada para esta fecha y hora.'])->withInput();
+    }
+
+    // Actualizar la cita
+    $cita->update($request->all());
+
+    return redirect()->route('cita.index')->with('success', 'Cita actualizada con éxito.');
     }
 
     /**
