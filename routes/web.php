@@ -8,8 +8,11 @@ Route::get('/', function () {
 return view('welcome');
 });
 
-Route::resource('cita', CitaController::class)->parameters(['cita' => 'cita']);
+//Route::resource('cita', CitaController::class)->parameters(['cita' => 'cita']);
 Route::resource('servicio', ServicioController::class)->parameters(['servicio' => 'servicio']);
+Route::resource('cita', CitaController::class)
+    ->parameters(['cita' => 'cita']);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
