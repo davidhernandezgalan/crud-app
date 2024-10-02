@@ -35,7 +35,14 @@ class CitaController extends Controller
         'fecha' => 'required|date',
         'hora' => 'required',
         'servicio' => 'required|string',
-        'comentario' => 'nullable|string'
+        'comentario' => 'nullable|string',
+    ],
+    [
+        'nombre.required' => 'El campo nombre es obligatorio.',
+        'nombre.string' => 'El nombre debe ser un texto.',
+        'nombre.max' => 'El nombre no puede exceder los 255 caracteres.',
+        'fecha.required' => 'El campo fecha es obligatorio.',
+        'fecha.date' => 'El valor proporcionado no es una fecha válida.',
     ]);
 
     // Verificar si ya existe una cita en la misma fecha y hora
@@ -83,11 +90,18 @@ class CitaController extends Controller
     public function update(Request $request, Cita $cita)
     {
         $request->validate([
-            'nombre' => ['required', 'max:255'],
+            'nombre' => ['required', 'max:255', 'string'],
             'fecha' => ['required', 'date'],
             'hora' => ['required'],
             'servicio' => ['required'],
             'comentario' => ['nullable', 'max:500'],
+        ],
+        [
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'nombre.string' => 'El nombre debe ser un texto.',
+            'nombre.max' => 'El nombre no puede exceder los 255 caracteres.',
+            'fecha.required' => 'El campo fecha es obligatorio.',
+            'fecha.date' => 'El valor proporcionado no es una fecha válida.',
         ]);
 
         $existeCita = Cita::where('fecha', $request->fecha)

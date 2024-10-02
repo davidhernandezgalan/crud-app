@@ -9,24 +9,27 @@
 <body>
     <h1>Crear Cita</h1>
 
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <style>
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
 
     <form action="{{ route('cita.store') }}" method="POST">
         @csrf
 
         <label for="nombre">Nombre del cliente:</label><br>
         <input type="text" name="nombre" value="{{ old('nombre') }}"><br>
+        @error('nombre')
+            <div class="error">{{ $message }}</div>
+        @enderror
 
         <label for="fecha">Fecha:</label><br>
         <input type="date" name="fecha" id="fecha" value="{{ old('fecha') }}"><br>
+        @error('fecha')
+            <div class="error">{{ $message }}</div>
+        @enderror
 
         <label for="hora">Hora:</label><br>
         <select name="hora" id="hora">
@@ -48,7 +51,7 @@
             <option value="18:30" {{ old('hora') == '18:30' ? 'selected' : '' }}>18:30</option>
             <option value="19:00" {{ old('hora') == '19:00' ? 'selected' : '' }}>19:00</option>
             <option value="19:30" {{ old('hora') == '19:30' ? 'selected' : '' }}>19:30</option>
-            <option value="20:00" {{ old('hora') == '19:30' ? 'selected' : '' }}>20:00</option>
+            <option value="20:00" {{ old('hora') == '20:00' ? 'selected' : '' }}>20:00</option>
         </select><br>
 
         <label for="servicio">Servicio:</label>
@@ -63,6 +66,9 @@
         <textarea name="comentario" cols="30" rows="4">{{ old('comentario') }}</textarea><br>
 
         <input type="submit" value="Agendar">
+        <a href="{{ url('/cita') }}">
+            <button type="button">Cancelar</button>
+        </a>
     </form>
 </body>
 </html>

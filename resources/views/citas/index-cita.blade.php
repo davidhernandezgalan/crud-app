@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Lista de Citas</title>
+    <style>
+        .actions {
+            display: flex; /* Alinear en fila */
+            gap: 10px; /* Espacio entre los botones */
+        }
+    </style>
 </head>
 <body>
     <h1>Lista de Citas</h1>
@@ -49,8 +55,18 @@
                 <td>{{ $cita->comentario }}</td>
                 <td>{{ $cita->created_at }}</td>
                 <td>{{ $cita->updated_at }}</td>
-                <td>
-                    <a href="{{ route('cita.edit', $cita) }}">Editar</a>
+                <td class="actions">
+                    <form action="{{ route('cita.show', $cita) }}" method="GET" style="margin: 0;">
+                        <button type="submit">Ver</button>
+                    </form>
+                    <form action="{{ route('cita.edit', $cita) }}" method="GET" style="margin: 0;">
+                        <button type="submit">Editar</button>
+                    </form>
+                    <form action="{{ route('cita.destroy', $cita) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Borrar</button>
+                    </form>
                 </td>
             </tr>
             @endforeach
