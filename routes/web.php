@@ -5,7 +5,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\ServicioController;
 
 Route::get('/', function () {
-return view('welcome');
+return view('index-dapriska');
 });
 
 //Route::resource('cita', CitaController::class)->parameters(['cita' => 'cita']);
