@@ -1,76 +1,35 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Lista de Citas</title>
-    <style>
-        .actions {
-            display: flex; /* Alinear en fila */
-            gap: 10px; /* Espacio entre los botones */
-        }
-    </style>
-</head>
-<body>
-    <h1>Lista de Citas</h1>
+<x-layout titulo="Citas">
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Citas</h1>
 
-    <p>
-        <a href="{{ route('cita.create') }}">Agregar Cita</a>
-    </p>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del Cliente</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Servicio</th>
-                <th>Comentario</th>
-                <th>Creación</th>
-                <th>Última Edición</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @foreach($citas as $cita)
-            <tr>
-                <td>{{ $cita->id }}</td>
-                <td>
-                    <a href="{{ route('cita.show', $cita) }}">
-                        {{ $cita->nombre }}
-                    </a>
-                </td>
-                <td>{{ $cita->fecha }}</td>
-                <td>
-                    @php
-                        // Convertir hora a formato 12 horas
-                        $time = \Carbon\Carbon::parse($cita->hora);
-                        $formattedTime = $time->format('g:i A'); // Ejemplo: 2:30 PM
-                    @endphp
-                    {{ $formattedTime }}
-                </td>
-                <td>{{ $cita->servicio }}</td>
-                <td>{{ $cita->comentario }}</td>
-                <td>{{ $cita->created_at }}</td>
-                <td>{{ $cita->updated_at }}</td>
-                <td class="actions">
-                    <form action="{{ route('cita.show', $cita) }}" method="GET" style="margin: 0;">
-                        <button type="submit">Ver</button>
-                    </form>
-                    <form action="{{ route('cita.edit', $cita) }}" method="GET" style="margin: 0;">
-                        <button type="submit">Editar</button>
-                    </form>
-                    <form action="{{ route('cita.destroy', $cita) }}" method="POST" style="margin: 0;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit">Borrar</button>
-                    </form>
-                </td>
-            </tr>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $cita->nombre }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ $cita->fecha }} - 
+                                @php
+                                    $time = \Carbon\Carbon::parse($cita->hora);
+                                    $formattedTime = $time->format('g:i A');
+                                @endphp
+                                {{ $formattedTime }}
+                            </h6>
+                            <p class="card-text"><strong>Servicio:</strong> {{ $cita->servicio }}</p>
+                            <p class="card-text"><strong>Comentario:</strong> {{ $cita->comentario }}</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="{{ route('cita.show', $cita) }}" class="btn" style="background-color: #004aad; color: white;">Ver</a>
+                            <a href="{{ route('cita.edit', $cita) }}" class="btn" style="background-color: #e4ac00; color: white;">Editar</a>
+                            <form action="{{ route('cita.destroy', $cita) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn" style="background-color: #ff3131; color: white;">Borrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </tbody>
-    </table>
-</body>
-</html>
+        </div>
+    </div>
+</x-layout>

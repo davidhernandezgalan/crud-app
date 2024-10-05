@@ -8,12 +8,11 @@ use Illuminate\View\Component;
 
 class Layout extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
+    public $titulo;
+
+    public function __construct($titulo = 'Sin título')
     {
-        //
+        $this->titulo = $titulo;
     }
 
     /**
