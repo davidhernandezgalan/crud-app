@@ -34,6 +34,9 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('cita.index') }}" aria-expanded="false">Citas</a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{{ route('servicio.index') }}" aria-expanded="false">Servicios</a>
+            </li>
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">ACCIONES</span>
