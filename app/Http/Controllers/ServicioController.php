@@ -31,9 +31,14 @@ class ServicioController extends Controller
     {
         // Validar los datos
         $validated = $request->validate([
-            'servicios' => 'required|array', // Se asegura de que se seleccionen al menos algunos servicios
+            'servicios' => 'required|array|min:1', // Se asegura de que haya al menos una opción seleccionada
             'comentario' => 'nullable|string',
+        ], 
+        [
+            'servicios.required' => 'Debes seleccionar al menos un servicio.', // Mensaje corregido
+            'servicios.min' => 'Debes seleccionar al menos un servicio.', // Mensaje adicional en caso de que no se cumpla el mínimo
         ]);
+        
 
         // Crear un nuevo registro en la base de datos
         Servicio::create([
@@ -44,7 +49,6 @@ class ServicioController extends Controller
         // Redireccionar o enviar respuesta
         return redirect()->route('servicio.index')->with('success', 'Servicios agregados correctamente.');
     }
-
     /**
      * Display the specified resource.
      */
@@ -74,6 +78,10 @@ class ServicioController extends Controller
         $validatedData = $request->validate([
             'servicios' => 'required|array', // Asegúrate de que sea un array
             'comentario' => 'nullable|string',
+        ],
+        [
+            'servicios.required' => 'Debes seleccionar al menos un servicio.', // Mensaje corregido
+            'servicios.min' => 'Debes seleccionar al menos un servicio.', // Mensaje adicional en caso de que no se cumpla el mínimo
         ]);
 
         // Actualizar los datos

@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Editar Servicio</title>
+    <title>Servicios</title>
 </head>
 <x-layout>
     <div class="container my-4">
-        <h1 class="text-center mb-4">Lista de Servicios</h1>
+        <h1 class="text-center mb-4">Servicios</h1>
 
-        <p class="text-end">
-            <a href="{{ route('servicio.create') }}" class="btn btn-primary">Agregar Servicio</a>
-        </p>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             @foreach($servicios as $servicio)

@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout titulo="Crear Servicio">
     <div class="container my-4">
         <h1 class="text-center mb-4">Crear Servicio</h1>
 
@@ -50,7 +50,8 @@
                 <textarea name="comentario" id="comentario" class="form-control" rows="4">{{ old('comentario') }}</textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">Agregar Servicios</button>
+            <button type="submit" class="btn" style="background-color: #004aad; color: white;">Agregar Servicios</button>
         </form>
     </div>
 </x-layout>
+

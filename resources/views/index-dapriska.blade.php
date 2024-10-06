@@ -1,7 +1,7 @@
 <x-layout titulo="Dapriska">
     <div class="container text-center mt-5">
         <!-- Logo -->
-        <img src="/material/images/logos/dapriskalogo (2).png" alt="Logo Dapriska" class="img-fluid mb-4 w-75">
+        <img src="/material/images/logos/dapriskalogo (2).png" alt="Logo Dapriska" class="img-fluid mb-4 w-50">
 
         <!-- Descripción -->
         <div style="max-width: 100%; text-align: center;">
