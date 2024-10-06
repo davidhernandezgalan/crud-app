@@ -1,32 +1,56 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Crear Servicio</title>
-</head>
-<body>
-    <h1>Crear Servicio</h1>
+<x-layout>
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Crear Servicio</h1>
 
-    <form action="{{ route('servicio.store') }}" method="POST">
-        @csrf
+        <form action="{{ route('servicio.store') }}" method="POST" class="p-4 border rounded shadow-sm">
+            @csrf
 
-        <fieldset>
-            <legend>Servicios:</legend>
-            <label><input type="checkbox" name="servicios[]" value="Barberia"> Barberia</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Tinte"> Tinte</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Maquillaje"> Maquillaje</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Peinado"> Peinado</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Corte Mujer"> Corte Mujer</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Corte Hombre"> Corte Hombre</label><br>
-            <label><input type="checkbox" name="servicios[]" value="Depilación"> Depilación</label><br>
-        </fieldset>
+            <fieldset class="mb-3">
+                <legend class="mb-3">Servicios:</legend>
 
-        <label for="comentario">Comentario:</label><br>
-        <textarea name="comentario" cols="30" rows="4">{{ old('comentario') }}</textarea><br>
+                <!-- Mostrar errores específicos para el campo "servicios" -->
+                @if ($errors->has('servicios'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('servicios') }}
+                    </div>
+                @endif
 
-        <input type="submit" value="Agregar Servicios">
-    </form>
-</body>
-</html>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Barberia" id="barberia">
+                    <label class="form-check-label" for="barberia">Barberia</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Tinte" id="tinte">
+                    <label class="form-check-label" for="tinte">Tinte</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Maquillaje" id="maquillaje">
+                    <label class="form-check-label" for="maquillaje">Maquillaje</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Peinado" id="peinado">
+                    <label class="form-check-label" for="peinado">Peinado</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Corte Mujer" id="corteMujer">
+                    <label class="form-check-label" for="corteMujer">Corte Mujer</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Corte Hombre" id="corteHombre">
+                    <label class="form-check-label" for="corteHombre">Corte Hombre</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Depilación" id="depilacion">
+                    <label class="form-check-label" for="depilacion">Depilación</label>
+                </div>
+            </fieldset>
+
+            <div class="mb-3">
+                <label for="comentario" class="form-label">Comentario:</label>
+                <textarea name="comentario" id="comentario" class="form-control" rows="4">{{ old('comentario') }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Agregar Servicios</button>
+        </form>
+    </div>
+</x-layout>
