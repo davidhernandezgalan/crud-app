@@ -14,13 +14,12 @@ class Cita extends Model
         'nombre', 
         'fecha', 
         'hora', 
-        'servicio', 
-        'comentario'
+        'comentario' // Omití 'servicio' ya que la relación maneja los servicios
     ];
 
-    // Los atributos que deberían ser ocultados para los arreglos
-    // protected $hidden = [];
-
-    // Los atributos que deberían ser casted a un tipo específico
-    // protected $casts = [];
+    // Definir la relación con el modelo Servicio a través de la tabla pivot 'servicios_cita'
+    public function servicios()
+    {
+        return $this->belongsToMany(Servicio::class, 'servicios_cita');
+    }
 }

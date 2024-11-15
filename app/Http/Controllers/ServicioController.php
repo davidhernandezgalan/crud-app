@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Servicio;
 use Illuminate\Http\Request;
 
@@ -12,8 +11,8 @@ class ServicioController extends Controller
      */
     public function index()
     {
-        $servicios = Servicio::all();
-        return view('servicios.index-servicio', compact('servicios'));
+        $servicios = Servicio::all(); // Obtener todos los servicios
+        return view('servicios.index-servicio', compact('servicios')); // Retornar vista con los servicios
     }
 
     /**
@@ -21,7 +20,7 @@ class ServicioController extends Controller
      */
     public function create()
     {
-        return view('servicios.create-servicio');
+        return view('servicios.create-servicio'); // Mostrar formulario para crear un servicio
     }
 
     /**
@@ -29,34 +28,30 @@ class ServicioController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos
+        // Validar el campo 'servicio' para que sea único
         $validated = $request->validate([
-            'servicios' => 'required|array|min:1', // Se asegura de que haya al menos una opción seleccionada
-            'comentario' => 'nullable|string',
+            'servicio' => 'required|string|max:255|unique:servicios,servicio', // Regla de unicidad
         ], 
         [
-            'servicios.required' => 'Debes seleccionar al menos un servicio.', // Mensaje corregido
-            'servicios.min' => 'Debes seleccionar al menos un servicio.', // Mensaje adicional en caso de que no se cumpla el mínimo
+            'servicio.required' => 'Debes ingresar un servicio.',
+            'servicio.unique' => 'El servicio ingresado ya existe.',
         ]);
-        
 
         // Crear un nuevo registro en la base de datos
         Servicio::create([
-            'servicios' => json_encode($validated['servicios']), // Almacenar como JSON
-            'comentario' => $validated['comentario'],
+            'servicio' => $validated['servicio'],
         ]);
 
-        // Redireccionar o enviar respuesta
-        return redirect()->route('servicio.index')->with('success', 'Servicios agregados correctamente.');
+        // Redirigir con mensaje de éxito
+        return redirect()->route('servicio.index')->with('success', 'Servicio agregado correctamente.');
     }
+
     /**
      * Display the specified resource.
      */
     public function show(Servicio $servicio)
     {
-        // Convertir el servicio JSON a array
-        $servicio->servicios = json_decode($servicio->servicios, true);
-        return view('servicios.show-servicio', compact('servicio'));
+        return view('servicios.show-servicio', compact('servicio')); // Mostrar detalles del servicio
     }
 
     /**
@@ -64,9 +59,7 @@ class ServicioController extends Controller
      */
     public function edit(Servicio $servicio)
     {
-        // Convertir el servicio JSON a array
-        $servicio->servicios = json_decode($servicio->servicios, true);
-        return view('servicios.edit-servicio', compact('servicio'));
+        return view('servicios.edit-servicio', compact('servicio')); // Mostrar formulario para editar un servicio
     }
 
     /**
@@ -74,34 +67,31 @@ class ServicioController extends Controller
      */
     public function update(Request $request, Servicio $servicio)
     {
-        // Validar los datos
+        // Validar el campo 'servicio' para que sea único en la base de datos, excluyendo el servicio actual
         $validatedData = $request->validate([
-            'servicios' => 'required|array', // Asegúrate de que sea un array
-            'comentario' => 'nullable|string',
-        ],
-        [
-            'servicios.required' => 'Debes seleccionar al menos un servicio.', // Mensaje corregido
-            'servicios.min' => 'Debes seleccionar al menos un servicio.', // Mensaje adicional en caso de que no se cumpla el mínimo
+            'servicio' => 'required|string|max:255|unique:servicios,servicio,' . $servicio->id, // Validación de unicidad
+        ], [
+            'servicio.required' => 'Debes ingresar un servicio.',
+            'servicio.unique' => 'El servicio ingresado ya existe.',
         ]);
 
-        // Actualizar los datos
-        $servicio->servicios = json_encode($validatedData['servicios']); // Convertir a JSON
-        $servicio->comentario = $validatedData['comentario'];
+        // Actualizar el servicio
+        $servicio->update([
+            'servicio' => $validatedData['servicio'],
+        ]);
 
-        // Guardar en la base de datos
-        $servicio->save();
-
-        // Redirigir o mostrar un mensaje de éxito
+        // Redirigir con mensaje de éxito
         return redirect()->route('servicio.index')->with('success', 'Servicio actualizado correctamente');
     }
-/**
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Servicio $servicio)
     {
-        $servicio->delete();
+        $servicio->delete(); // Eliminar el servicio
 
-        return redirect()->route('servicio.index');
+        // Redirigir con mensaje de éxito
+        return redirect()->route('servicio.index')->with('success', 'Servicio eliminado correctamente');
     }
-
 }

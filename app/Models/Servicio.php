@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Servicio extends Model
 {
-    protected $fillable = ['servicios', 'comentario'];
+    use HasFactory;
 
-    // Cast para que los servicios se manejen como array
-    protected $casts = [
-        'servicios' => 'array',
-    ];
+    protected $fillable = ['servicio'];
 }
+

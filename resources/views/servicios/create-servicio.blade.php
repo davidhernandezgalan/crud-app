@@ -6,52 +6,28 @@
             @csrf
 
             <fieldset class="mb-3">
-                <legend class="mb-3">Servicios:</legend>
+                <legend class="mb-3">Servicio:</legend>
 
-                <!-- Mostrar errores específicos para el campo "servicios" -->
-                @if ($errors->has('servicios'))
+                <!-- Mostrar errores específicos para el campo "servicio" -->
+                @error('servicio')
                     <div class="alert alert-danger">
-                        {{ $errors->first('servicios') }}
+                        {{ $message }}
                     </div>
-                @endif
+                @enderror
 
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Barberia" id="barberia">
-                    <label class="form-check-label" for="barberia">Barberia</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Tinte" id="tinte">
-                    <label class="form-check-label" for="tinte">Tinte</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Maquillaje" id="maquillaje">
-                    <label class="form-check-label" for="maquillaje">Maquillaje</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Peinado" id="peinado">
-                    <label class="form-check-label" for="peinado">Peinado</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Corte Mujer" id="corteMujer">
-                    <label class="form-check-label" for="corteMujer">Corte Mujer</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Corte Hombre" id="corteHombre">
-                    <label class="form-check-label" for="corteHombre">Corte Hombre</label>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="servicios[]" value="Depilación" id="depilacion">
-                    <label class="form-check-label" for="depilacion">Depilación</label>
+                <!-- Campo de texto para el servicio -->
+                <div class="mb-3">
+                    <label for="servicio" class="form-label">Nombre del Servicio:</label>
+                    <input type="text" class="form-control @error('servicio') is-invalid @enderror" 
+                           name="servicio" id="servicio" value="{{ old('servicio') }}" required>
+                    <!-- Si hay un error, se mostrará una alerta debajo del campo -->
+                    @error('servicio')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
             </fieldset>
 
-            <div class="mb-3">
-                <label for="comentario" class="form-label">Comentario:</label>
-                <textarea name="comentario" id="comentario" class="form-control" rows="4">{{ old('comentario') }}</textarea>
-            </div>
-
-            <button type="submit" class="btn" style="background-color: #004aad; color: white;">Agregar Servicios</button>
+            <button type="submit" class="btn" style="background-color: #004aad; color: white;">Agregar Servicio</button>
         </form>
     </div>
 </x-layout>
-
