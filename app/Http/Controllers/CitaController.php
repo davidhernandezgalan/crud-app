@@ -4,25 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cita;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use App\Models\Servicio;
 
 class CitaController extends Controller
 {
-=======
-//use Illuminate\Routing\Controllers\HasMiddleware;
-//use Illuminate\Routing\Controllers\Middleware;
-
-class CitaController extends Controller //implements HasMiddleware
-{
-    /**public static function middleware(): array
-    {
-        return [
-            new Middleware('auth', except: ['index', 'show']),
-        ];
-    }*/
-
->>>>>>> 471110ea365f99c755fa285d0933dc09e6bc8bc3
     /**
      * Display a listing of the resource.
      */
@@ -44,9 +29,6 @@ class CitaController extends Controller //implements HasMiddleware
         return view('citas.create-cita', compact('servicios')); // Aquí ya está corregido
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Validar datos del formulario
@@ -85,17 +67,13 @@ class CitaController extends Controller //implements HasMiddleware
         $cita->comentario = $request->comentario;
         $cita->save();
 
-        //--------------Duda-------------------------------
-        // Relacionar los servicios seleccionados con la cita
+        // Asociar los servicios seleccionados con la cita
         $cita->servicios()->sync($request->servicios);
-        //--------------Duda-------------------------------
 
         return redirect()->route('cita.index')->with('success', 'Cita creada exitosamente.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+  
     public function show(Cita $cita)
     {
         return view('citas.show-cita', compact('cita'));
