@@ -24,4 +24,13 @@ class Cita extends Model
     {
         return $this->belongsToMany(Servicio::class, 'servicios_cita');
     }
+
+    protected function casts(): array
+    {
+        return [
+            'fecha' => 'date:Y-m-d',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
+        ];
+    }
 }

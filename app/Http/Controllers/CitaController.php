@@ -14,7 +14,10 @@ class CitaController extends Controller
      */
     public function index()
     {
-        $citas = Cita::all();
+        //$citas = Cita::all();
+        $citas = Cita::with('servicios')
+            ->with('user:id,name,email')
+            ->get();
         return view('citas.index-cita', compact('citas'));
     }
 
