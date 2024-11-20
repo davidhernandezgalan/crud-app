@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('servicio'); // Servicio solicitado
             $table->text('comentario')->nullable(); // Comentario adicional
             $table->timestamps(); // Campos created_at y updated_at
+            $table->softDeletes();
         });
     }
 
