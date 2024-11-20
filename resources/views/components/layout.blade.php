@@ -61,16 +61,18 @@
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">Autenticación</span>
             </li>
+            @guest
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/login" aria-expanded="false">
+              <a class="sidebar-link" href="{{ route('login') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-login"></i>
                 </span>
                 <span class="hide-menu">Inicio de sesión</span>
               </a>
             </li>
+            @endguest
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/register" aria-expanded="false">
+              <a class="sidebar-link" href="{{ route('register') }}" aria-expanded="false">
                 <span>
                   <i class="ti ti-user-plus"></i>
                 </span>
@@ -116,17 +118,22 @@
                   <div class="message-body">
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">My Profile</p>
+                      <p class="mb-0 fs-3">Mi Perfil</p>
                     </a>
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
+                      <p class="mb-0 fs-3">Mi Cuenta</p>
                     </a>
                     <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
+                      <p class="mb-0 fs-3">Mis Tareas</p>
                     </a>
-                    <a href="{{ url('/') }}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                    @auth
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-outline-primary mx-3 mt-2 d-block">Salir</a>
+                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                      @csrf
+                    </form>
+                    @endauth
                   </div>
                 </div>
               </li>

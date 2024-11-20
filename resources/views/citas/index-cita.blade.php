@@ -35,8 +35,13 @@
 
                             <!-- Comentario -->
                             @if($cita->comentario)
-                                <p><strong>Comentario:</strong> {{ $cita->comentario }}</p>
+                              <p><strong>Comentario:</strong> {{ $cita->comentario }}</p>
                             @endif
+
+                            <!-- Nombre del Barbero -->
+                             @if($cita->user)
+                               <p><strong>Barbero:</strong> {{ $cita->user->name }}</p>
+                             @endif
                         </div>
 
                         <!-- Botones de acciones -->
