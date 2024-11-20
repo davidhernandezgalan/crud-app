@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('servicio'); // Campo de texto para un único servicio
             $table->text('comentario')->nullable(); // Comentario adicional
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
