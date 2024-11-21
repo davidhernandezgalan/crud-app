@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Mail\ServicioNuevo;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
+use App\Models\User;
+
+use Illuminate\Support\Facades\Mail;
 
 class ServicioController extends Controller
 {
@@ -31,20 +35,28 @@ class ServicioController extends Controller
         // Validar el campo 'servicio' para que sea único
         $validated = $request->validate([
             'servicio' => 'required|string|max:255|unique:servicios,servicio', // Regla de unicidad
-        ], 
-        [
+        ], [
             'servicio.required' => 'Debes ingresar un servicio.',
             'servicio.unique' => 'El servicio ingresado ya existe.',
         ]);
-
-        // Crear un nuevo registro en la base de datos
-        Servicio::create([
+    
+        // Crear un nuevo registro en la base de datos y guardar la instancia
+        $servicio = Servicio::create([
             'servicio' => $validated['servicio'],
         ]);
-
+    
+        // Obtener todos los correos de los suscriptores
+        $suscriptores = User::pluck('email');
+    
+        // Enviar correos a los suscriptores
+        foreach ($suscriptores as $suscriptor) {
+            Mail::to($suscriptor)->send(new ServicioNuevo($servicio));
+        }
+    
         // Redirigir con mensaje de éxito
         return redirect()->route('servicio.index')->with('success', 'Servicio agregado correctamente.');
     }
+    
 
     /**
      * Display the specified resource.
@@ -94,4 +106,5 @@ class ServicioController extends Controller
         // Redirigir con mensaje de éxito
         return redirect()->route('servicio.index')->with('success', 'Servicio eliminado correctamente');
     }
+    
 }
