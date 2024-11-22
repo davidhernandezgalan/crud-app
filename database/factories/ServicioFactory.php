@@ -18,7 +18,7 @@ class ServicioFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+     public function definition(): array
     {
         return [
             'servicio' => $this->faker->unique()->randomElement([
@@ -31,4 +31,14 @@ class ServicioFactory extends Factory
             ]),
         ];
     }
+    public function configure()
+    {
+        return $this->afterCreating(function (Servicio $servicio) {
+            // Crea un archivo asociado al servicio
+            \App\Models\Archivo::factory()->create([
+                'servicio_id' => $servicio->id,
+            ]);
+        });
+    }
+    
 }

@@ -12,5 +12,9 @@ class Servicio extends Model
     use SoftDeletes;
 
     protected $fillable = ['servicio'];
+    public function archivos()
+    {
+        return $this->hasMany(Archivo::class, 'servicio_id');
+    }
 }
 
