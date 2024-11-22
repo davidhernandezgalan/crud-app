@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Mail\ServicioNuevo;
+use App\Models\Archivo;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+
 
 use Illuminate\Support\Facades\Mail;
 
@@ -34,21 +37,42 @@ class ServicioController extends Controller
     {
         // Validar el campo 'servicio' para que sea único
         $validated = $request->validate([
-            'servicio' => 'required|string|max:255|unique:servicios,servicio', // Regla de unicidad
+            'servicio' => 'required|string|max:255|unique:servicios,servicio',
         ], [
             'servicio.required' => 'Debes ingresar un servicio.',
             'servicio.unique' => 'El servicio ingresado ya existe.',
         ]);
     
-        // Crear un nuevo registro en la base de datos y guardar la instancia
+        // Crear el servicio sin incluir la columna 'imagen'
         $servicio = Servicio::create([
             'servicio' => $validated['servicio'],
         ]);
     
+        // Verificar y manejar los archivos
+        if ($request->hasFile('archivo') && $request->file('archivo')->isValid()) {
+            $ruta = $request->archivo->store('mis-archivos', 'public');
+    
+            $archivo = new Archivo([
+                'nombre_original' => $request->archivo->getClientOriginalName(),
+                'ruta' => $ruta,
+            ]);
+    
+            $servicio->archivos()->save($archivo);
+        }
+    
+        // Verificar y manejar las imágenes
+        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
+            $path = $request->file('imagen')->store('imagenes_servicios', 'public');
+    
+            $imagen = new Archivo([
+                'nombre_original' => $request->file('imagen')->getClientOriginalName(),
+                'ruta' => $path,
+            ]);
+    
+            $servicio->archivos()->save($imagen);
+        }
         // Obtener todos los correos de los suscriptores
         $suscriptores = User::pluck('email');
-    
-        // Enviar correos a los suscriptores
         foreach ($suscriptores as $suscriptor) {
             Mail::to($suscriptor)->send(new ServicioNuevo($servicio));
         }
@@ -56,8 +80,6 @@ class ServicioController extends Controller
         // Redirigir con mensaje de éxito
         return redirect()->route('servicio.index')->with('success', 'Servicio agregado correctamente.');
     }
-    
-
     /**
      * Display the specified resource.
      */
@@ -78,33 +100,51 @@ class ServicioController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Servicio $servicio)
-    {
-        // Validar el campo 'servicio' para que sea único en la base de datos, excluyendo el servicio actual
-        $validatedData = $request->validate([
-            'servicio' => 'required|string|max:255|unique:servicios,servicio,' . $servicio->id, // Validación de unicidad
-        ], [
-            'servicio.required' => 'Debes ingresar un servicio.',
-            'servicio.unique' => 'El servicio ingresado ya existe.',
-        ]);
+{
+    // Validación de los campos
+    $request->validate([
+        'servicio' => 'required|string|max:255',
+        'archivo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        // Actualizar el servicio
-        $servicio->update([
-            'servicio' => $validatedData['servicio'],
-        ]);
+    // Actualizamos el nombre del servicio
+    $servicio->servicio = $request->input('servicio');
+    $servicio->save(); // Guardamos el nombre del servicio
 
-        // Redirigir con mensaje de éxito
-        return redirect()->route('servicio.index')->with('success', 'Servicio actualizado correctamente');
+    // Si se ha subido un nuevo archivo
+    if ($request->hasFile('archivo')) {
+        // Eliminar el archivo anterior si existe
+        if ($servicio->archivos->isNotEmpty()) {
+            $archivoAnterior = $servicio->archivos->first();
+            // Eliminar archivo físico si existe
+            Storage::delete('public/' . $archivoAnterior->ruta);
+            // Eliminar el registro de archivo de la base de datos
+            $archivoAnterior->delete();
+        }
+
+        // Subir el nuevo archivo
+        $ruta = $request->file('archivo')->store('servicios', 'public');
+        $archivo = new Archivo([
+            'nombre_original' => $request->file('archivo')->getClientOriginalName(),
+            'ruta' => $ruta,
+        ]);
+        $servicio->archivos()->save($archivo); // Guardar el nuevo archivo asociado al servicio
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Servicio $servicio)
-    {
-        $servicio->delete(); // Eliminar el servicio
+    return redirect()->route('servicio.index')->with('success', 'Servicio actualizado con éxito.');
+}
 
-        // Redirigir con mensaje de éxito
-        return redirect()->route('servicio.index')->with('success', 'Servicio eliminado correctamente');
+    public function descargar(Archivo $archivo)
+    {
+        // Verificar si el archivo existe
+        if (Storage::disk('public')->exists($archivo->ruta)) {
+            // Devolver el archivo para su descarga
+            return response()->download(storage_path('app/public/' . $archivo->ruta), $archivo->nombre_original);
+        }
+    
+        // Si el archivo no existe, redirigir con mensaje de error
+        return redirect()->back()->with('error', 'El archivo no existe.');
     }
+
     
 }

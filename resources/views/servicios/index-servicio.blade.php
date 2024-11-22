@@ -7,36 +7,47 @@
     <title>Servicios</title>
 </head>
 <x-layout>
-    <div class="container my-4">
-        <h1 class="text-center mb-4">Servicios</h1>
+<div class="container my-4">
+    <h1 class="text-center mb-4">Servicios</h1>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach($servicios as $servicio)
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Servicio #{{ $servicio->id }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                <small>{{ $servicio->servicio }}</small> <!-- Nombre del servicio en letras más pequeñas -->
-                            </h6>
-                        </div>
-                        <div class="card-footer d-flex justify-content-center">
-                            <a href="{{ route('servicio.show', $servicio) }}" class="btn me-2" style="background-color: #004aad; color: white;">Ver</a>
-                            <a href="{{ route('servicio.edit', $servicio) }}" class="btn me-2" style="background-color: #e4ac00; color: white;">Editar</a>
-                            
-                            <!-- Formulario para borrar el servicio con confirmación -->
-                            <form action="{{ route('servicio.destroy', $servicio) }}" method="POST" class="d-inline" id="deleteForm{{ $servicio->id }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn mx-2" style="background-color: #ff3131; color: white;" onclick="openModal('{{ $servicio->id }}')">Borrar</button>
-
-                            </form>
-                        </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach($servicios as $servicio)
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Servicio #{{ $servicio->id }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <small>{{ $servicio->servicio }}</small> <!-- Nombre del servicio en letras más pequeñas -->
+                        </h6>
+                        
+                        <!-- Vista previa de la imagen asociada al servicio -->
+                        @if($servicio->archivos->isNotEmpty())
+                            <div class="my-3 text-center">
+                                <!-- Mostrar la primera imagen asociada al servicio -->
+                                <img src="{{ asset('storage/' . $servicio->archivos->first()->ruta) }}" alt="Imagen de servicio" class="img-fluid" width="100">
+                            </div>
+                        @else
+                            <div class="my-3 text-center">
+                                <span>No hay imagen</span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-footer d-flex justify-content-center">
+                        <a href="{{ route('servicio.show', $servicio) }}" class="btn me-2" style="background-color: #004aad; color: white;">Ver</a>
+                        <a href="{{ route('servicio.edit', $servicio) }}" class="btn me-2" style="background-color: #e4ac00; color: white;">Editar</a>
+                        
+                        <!-- Formulario para borrar el servicio con confirmación -->
+                        <form action="{{ route('servicio.destroy', $servicio) }}" method="POST" class="d-inline" id="deleteForm{{ $servicio->id }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn mx-2" style="background-color: #ff3131; color: white;" onclick="openModal('{{ $servicio->id }}')">Borrar</button>
+                        </form>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
+</div>
 
     <!-- Modal de Confirmación -->
     <div class="modal" tabindex="-1" id="confirmModal" style="display: none;">

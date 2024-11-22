@@ -3,10 +3,33 @@
         <h1 class="text-center mb-4">Detalle de Servicio</h1>
 
         <div class="card">
-            <div class="card-body">
-                <!-- Mostrar el ID y el nombre del servicio -->
-                <h5 class="card-title">Servicio: <small>{{ $servicio->servicio }}</small></h5>
+        <div class="card-body">
+    <!-- Mostrar el ID y el nombre del servicio, centrado -->
+    <h5 class="card-title text-center">Servicio: <small>{{ $servicio->servicio }}</small></h5>
+
+    <!-- Mostrar Imágenes Asociadas al Servicio, centradas -->
+    @foreach ($servicio->archivos as $archivo)
+        @if (in_array(pathinfo($archivo->nombre_original, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
+            <div class="text-center my-3">
+                    <img src="{{ asset('/storage/'.$archivo->ruta) }}" alt="{{ $archivo->nombre_original }}" width="200" class="img-fluid rounded shadow-sm">
             </div>
+        @endif
+    @endforeach
+</div>
+
+<!-- Lista de archivos con botones de descarga centrados -->
+<ul class="list-unstyled text-center">
+    @foreach ($servicio->archivos as $archivo)
+        <li class="my-2">
+            <form action="{{ route('descargar', $archivo) }}" method="GET" class="d-inline" id="downloadForm{{ $archivo->id }}">
+                @csrf
+                <button type="submit" class="btn" style="background-color: #004aad; color: white;">
+                    Descargar Imagen
+                </button>
+            </form>
+        </li>
+    @endforeach
+</ul>
             <div class="card-footer d-flex justify-content-center">
                 <!-- Enlace de edición del servicio -->
                 <a class="btn" href="{{ route('servicio.edit', $servicio->id) }}" style="background-color: #e4ac00; color: white;">Editar</a>
@@ -19,7 +42,6 @@
                 </form>
             </div>
         </div>
-    </div>
 
     <!-- Modal de Confirmación -->
     <div class="modal" tabindex="-1" id="confirmModal" style="display: none;">
