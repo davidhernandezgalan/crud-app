@@ -57,11 +57,12 @@
                 <span class="hide-menu">Crear servicio</span>
               </a>
             </li>
+            @guest
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">Autenticación</span>
             </li>
-            @guest
+        
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('login') }}" aria-expanded="false">
                 <span>
@@ -70,7 +71,7 @@
                 <span class="hide-menu">Inicio de sesión</span>
               </a>
             </li>
-            @endguest
+
             <li class="sidebar-item">
               <a class="sidebar-link" href="{{ route('register') }}" aria-expanded="false">
                 <span>
@@ -79,7 +80,7 @@
                 <span class="hide-menu">Registrarse</span>
               </a>
             </li>
-
+            @endguest
           </ul>
           
         </nav>
@@ -99,12 +100,7 @@
                 <i class="ti ti-menu-2"></i>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link nav-icon-hover" href="javascript:void(0)">
-                <i class="ti ti-bell-ringing"></i>
-                <div class="notification bg-primary rounded-circle"></div>
-              </a>
-            </li>
+            
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -116,18 +112,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-user fs-6"></i>
-                      <p class="mb-0 fs-3">Mi Perfil</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">Mi Cuenta</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">Mis Tareas</p>
-                    </a>
+                    
                     @auth
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-outline-primary mx-3 mt-2 d-block">Salir</a>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
