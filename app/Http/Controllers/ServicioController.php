@@ -153,6 +153,15 @@ class ServicioController extends Controller implements HasMiddleware
         // Si el archivo no existe, redirigir con mensaje de error
         return redirect()->back()->with('error', 'El archivo no existe.');
     }
+    
+    
+    public function destroy(Servicio $servicio)
+    {
+        $servicio->delete(); // Eliminar el servicio
+    return redirect()->route('servicio.index')->with('success', 'Servicio actualizado con éxito.');
+    }
+
+
 
     
 }
