@@ -6,6 +6,7 @@ use App\Models\Cita;
 use Illuminate\Http\Request;
 use App\Models\Servicio;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CitaController extends Controller
 {
@@ -16,7 +17,8 @@ class CitaController extends Controller
     {
         //$citas = Cita::all();
         $citas = Cita::with('servicios')
-            ->with('user:id,name,email')
+            //->with('user:id,name,email')
+            ->where('user_id', Auth::id())
             ->get();
         return view('citas.index-cita', compact('citas'));
     }
@@ -26,6 +28,7 @@ class CitaController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Cita::class);
         // Obtener todos los servicios
         $servicios = Servicio::all();
 
@@ -35,6 +38,7 @@ class CitaController extends Controller
 
     public function store(Request $request)
 {
+    Gate::authorize('create', Cita::class);
     // Validar datos del formulario
     $request->validate([
         'nombre' => 'required|string|max:255',
@@ -54,9 +58,11 @@ class CitaController extends Controller
         'servicios.*.exists' => 'Uno o más servicios seleccionados no son válidos.',
     ]);
 
+    //dd(Auth::user()->id);
     // Verificar si ya existe una cita en la misma fecha y hora
     $citaExistente = Cita::where('fecha', $request->fecha)
                           ->where('hora', $request->hora)
+                          ->where('user_id', Auth::user()->id)
                           ->first();
 
     if ($citaExistente) {
@@ -80,6 +86,8 @@ class CitaController extends Controller
   
     public function show(Cita $cita)
     {
+        Gate::authorize('view', $cita);
+
         return view('citas.show-cita', compact('cita'));
     }
 
@@ -88,6 +96,8 @@ class CitaController extends Controller
      */
     public function edit(Cita $cita)
     {
+       Gate::authorize('update', $cita);
+
         $servicios = Servicio::all();
         return view('citas.edit-cita', compact('cita', 'servicios'));
     }
@@ -97,6 +107,9 @@ class CitaController extends Controller
      */
     public function update(Request $request, Cita $cita)
     {
+
+        Gate::authorize('update', $cita);
+        
         // Validar datos del formulario
         $request->validate([
             'nombre' => 'required|string|max:255',
@@ -119,6 +132,7 @@ class CitaController extends Controller
         // Verificar si ya existe una cita en la misma fecha y hora, excluyendo la cita que se está editando
         $existeCita = Cita::where('fecha', $request->fecha)
                           ->where('hora', $request->hora)
+                          ->where('user_id', Auth::user()->id)
                           ->where('id', '!=', $cita->id) // Excluir la cita que se está editando
                           ->exists();
 
@@ -140,6 +154,8 @@ class CitaController extends Controller
      */
     public function destroy(Cita $cita)
     {
+        Gate::authorize('delete', $cita); 
+
         $cita->delete();
 
         return redirect()->route('cita.index')->with('success', 'Cita eliminada con éxito.');
