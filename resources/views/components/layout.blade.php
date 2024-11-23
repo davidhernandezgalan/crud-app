@@ -104,7 +104,7 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-             
+              @auth
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -112,16 +112,16 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    
-                    @auth
+                  
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-outline-primary mx-3 mt-2 d-block">Salir</a>
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                       @csrf
                     </form>
-                    @endauth
+              
                   </div>
                 </div>
               </li>
+              @endauth
             </ul>
           </div>
         </nav>
